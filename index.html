@@ -432,6 +432,67 @@ height:520px;
 
 }
 
+
+.calendar-mobile{
+  display:none;
+}
+
+.calendar-desktop{
+  display:block;
+}
+
+.calendar-desktop iframe{
+  width:100%;
+  height:720px;
+  background:#fff;
+}
+
+.calendar-mobile iframe{
+  width:100%;
+  height:520px;
+  background:#fff;
+}
+
+@media(max-width:768px){
+  .calendar-desktop{
+    display:none !important;
+  }
+
+  .calendar-mobile{
+    display:block !important;
+    border-radius:22px;
+    overflow:hidden;
+  }
+
+  .calendar-mobile iframe{
+    height:540px;
+  }
+
+  #schedule{
+    padding-left:12px;
+    padding-right:12px;
+  }
+}
+
+
+.school-event{
+  margin-top:18px;
+  font-size:1.05rem;
+  font-weight:bold;
+  line-height:1.8;
+  color:#ffd36b;
+  text-align:center;
+}
+
+.seo-text{
+  max-width:900px;
+  margin:60px auto 20px;
+  padding:0 20px;
+  color:#ccc;
+  line-height:1.9;
+  font-size:0.95rem;
+}
+
 </style>
 </head>
 
@@ -526,15 +587,23 @@ height:520px;
       出店予定はリアルタイムで更新されます。
     </div>
 
-    <div class="calendar-box">
-      
-<iframe
-src="https://calendar.google.com/calendar/embed?src=yamatai0806%40gmail.com&ctz=Asia%2FTokyo&mode=AGENDA&showTitle=0&showNav=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&bgcolor=%23111111"
-frameborder="0"
-scrolling="no">
-</iframe>
-
+    
+    <div class="calendar-box calendar-desktop">
+      <iframe
+        src="https://calendar.google.com/calendar/embed?src=yamatai0806%40gmail.com&ctz=Asia%2FTokyo&mode=MONTH&showTitle=0&showPrint=0&showCalendars=0&showTz=0"
+        frameborder="0"
+        scrolling="no">
+      </iframe>
     </div>
+
+    <div class="calendar-box calendar-mobile">
+      <iframe
+        src="https://calendar.google.com/calendar/embed?src=yamatai0806%40gmail.com&ctz=Asia%2FTokyo&mode=AGENDA&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0"
+        frameborder="0"
+        scrolling="no">
+      </iframe>
+    </div>
+
 
   </div>
 
@@ -673,7 +742,7 @@ scrolling="no">
       <div class="about-item">
         <div class="about-icon">🏮</div>
         <div class="about-text">
-          <strong>お祭り出店OK</strong>
+          <strong>学校祭出店OK</strong>
           <span>祭り系との相性抜群</span>
         </div>
       </div>
@@ -797,6 +866,20 @@ scrolling="no">
 
 <footer>
 845syoten.jp（予定）<br><br>© はしご商店
+
+<section class="seo-text">
+<p>
+愛知県・知多半島エリアを中心に、
+大学祭、専門学校イベント、企業イベント、
+地域のお祭りなどへキッチンカー出店を行っています。
+</p>
+
+<p>
+揚げパンサンド・スイーツ系キッチンカーを
+お探しの方はお気軽にご相談ください。
+</p>
+</section>
+
 </footer>
 
 <script>
