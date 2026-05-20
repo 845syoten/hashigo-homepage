@@ -1053,37 +1053,46 @@ TEL
 
 
 
+
+
+
 <script>
-(async function(){
+function updateTodayShop(data){
   const place = document.getElementById("todayPlace");
   const time = document.getElementById("todayTime");
   const box = document.querySelector(".today-shop");
 
   if(!place || !time || !box) return;
 
-  try{
-    const res = await fetch("https://script.google.com/macros/s/AKfycbwVUalCKPkc8a3rN-eUN_sjRxw_xyZiaRjXPBDfBakLN4Yjp2k3nBDmr3ZTkQ9OZ8eg/exec");
-    const data = await res.json();
+  place.textContent = data.message || "本日の出店情報";
+  time.textContent = data.sub || "";
 
-    place.textContent = data.message || "本日の出店情報";
-    time.textContent = data.sub || "";
+  box.classList.remove("closed","next");
 
-    box.classList.remove("closed","next");
-
-    if(data.status === "closed"){
-      box.classList.add("closed");
-    }
-
-    if(data.status === "next"){
-      box.classList.add("next");
-    }
-
-  }catch(err){
-    place.textContent = "本日の出店情報を取得できません";
-    time.textContent = "時間を置いて再読み込みしてください";
+  if(data.status === "closed"){
     box.classList.add("closed");
-    console.log(err);
   }
+
+  if(data.status === "next"){
+    box.classList.add("next");
+  }
+}
+
+(function(){
+  const place = document.getElementById("todayPlace");
+  const time = document.getElementById("todayTime");
+  const box = document.querySelector(".today-shop");
+
+  const script = document.createElement("script");
+  script.src = "https://script.google.com/macros/s/AKfycbwVUalCKPkc8a3rN-eUN_sjRxw_xyZiaRjXPBDfBakLN4Yjp2k3nBDmr3ZTkQ9OZ8eg/exec?callback=updateTodayShop&t=" + Date.now();
+
+  script.onerror = function(){
+    if(place) place.textContent = "本日の出店情報を取得できません";
+    if(time) time.textContent = "出店スケジュールをご確認ください";
+    if(box) box.classList.add("closed");
+  };
+
+  document.body.appendChild(script);
 })();
 </script>
 
