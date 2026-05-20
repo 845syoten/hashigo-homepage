@@ -1050,137 +1050,40 @@ TEL
 </div>
 
 
+
+
+
 <script>
-(function(){
-  const todayPlace = document.getElementById("todayPlace");
-  const todayTime = document.getElementById("todayTime");
+(async function(){
+  const place = document.getElementById("todayPlace");
+  const time = document.getElementById("todayTime");
   const box = document.querySelector(".today-shop");
 
-  if(!todayPlace || !todayTime) return;
+  if(!place || !time || !box) return;
 
-  const calendarId = "yamatai0806@gmail.com";
-  const icsUrl = `https://calendar.google.com/calendar/ical/${encodeURIComponent(calendarId)}/public/basic.ics`;
+  try{
+    const res = await fetch("https://script.google.com/macros/s/AKfycbwVUalCKPkc8a3rN-eUN_sjRxw_xyZiaRjXPBDfBakLN4Yjp2k3nBDmr3ZTkQ9OZ8eg/exec");
+    const data = await res.json();
 
-  // GitHub PagesからGoogle Calendar iCalを読むためのCORS回避用
-  const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(icsUrl);
+    place.textContent = data.message || "本日の出店情報";
+    time.textContent = data.sub || "";
 
-  function parseDate(value){
-    if(!value) return null;
+    box.classList.remove("closed","next");
 
-    // 例: 20260525
-    if(/^\d{8}$/.test(value)){
-      return new Date(
-        Number(value.slice(0,4)),
-        Number(value.slice(4,6)) - 1,
-        Number(value.slice(6,8))
-      );
-    }
-
-    // 例: 20260525T010000Z
-    if(/^\d{8}T\d{6}Z?$/.test(value)){
-      const year = Number(value.slice(0,4));
-      const month = Number(value.slice(4,6)) - 1;
-      const day = Number(value.slice(6,8));
-      const hour = Number(value.slice(9,11));
-      const min = Number(value.slice(11,13));
-
-      if(value.endsWith("Z")){
-        return new Date(Date.UTC(year, month, day, hour, min));
-      }
-
-      return new Date(year, month, day, hour, min);
-    }
-
-    return null;
-  }
-
-  function sameDay(a,b){
-    return a.getFullYear() === b.getFullYear()
-      && a.getMonth() === b.getMonth()
-      && a.getDate() === b.getDate();
-  }
-
-  function cleanTitle(title){
-    return (title || "")
-      .replace(/^出店[:：]\s*/,"")
-      .replace(/\\,/g,",")
-      .trim();
-  }
-
-  function unfoldIcs(text){
-    return text.replace(/\r?\n[ \t]/g, "");
-  }
-
-  function parseEvents(icsText){
-    const text = unfoldIcs(icsText);
-    const blocks = text.split("BEGIN:VEVENT").slice(1);
-
-    return blocks.map(block => {
-      const summaryMatch = block.match(/SUMMARY(?:;[^:]*)?:(.*)/);
-      const dtStartMatch = block.match(/DTSTART(?:;[^:]*)?:(.*)/);
-      const dtEndMatch = block.match(/DTEND(?:;[^:]*)?:(.*)/);
-
-      const title = summaryMatch ? summaryMatch[1].trim() : "";
-      const startRaw = dtStartMatch ? dtStartMatch[1].trim() : "";
-      const endRaw = dtEndMatch ? dtEndMatch[1].trim() : "";
-
-      return {
-        title: cleanTitle(title),
-        start: parseDate(startRaw),
-        end: parseDate(endRaw),
-        rawTitle: title
-      };
-    }).filter(e => e.title && e.start);
-  }
-
-  function formatDate(date){
-    const week = ["日","月","火","水","木","金","土"][date.getDay()];
-    return `${date.getMonth()+1}/${date.getDate()}（${week}）`;
-  }
-
-  async function loadTodaySchedule(){
-    try{
-      const res = await fetch(proxyUrl, { cache: "no-store" });
-      if(!res.ok) throw new Error("calendar fetch failed");
-
-      const ics = await res.text();
-      const events = parseEvents(ics);
-
-      const now = new Date();
-      const todayEvents = events.filter(e => sameDay(e.start, now));
-
-      if(todayEvents.length > 0){
-        const names = todayEvents.map(e => e.title).join("・");
-        box.classList.remove("closed","next");
-        todayPlace.textContent = `本日は「${names}」に出店予定！`;
-        todayTime.textContent = "詳しい時間・場所は出店スケジュールをご確認ください";
-        return;
-      }
-
-      const upcoming = events
-        .filter(e => e.start >= new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1))
-        .sort((a,b) => a.start - b.start)[0];
-
-      if(upcoming){
-        box.classList.remove("closed");
-        box.classList.add("next");
-        todayPlace.textContent = "本日は出店予定はありません";
-        todayTime.textContent = `次回出店：${formatDate(upcoming.start)}「${upcoming.title}」`;
-      }else{
-        box.classList.add("closed");
-        todayPlace.textContent = "本日は出店予定はありません";
-        todayTime.textContent = "次回出店は決まり次第お知らせします";
-      }
-
-    }catch(err){
+    if(data.status === "closed"){
       box.classList.add("closed");
-      todayPlace.textContent = "本日の出店情報はカレンダーをご確認ください";
-      todayTime.textContent = "Googleカレンダーの公開設定が必要です";
-      console.warn(err);
     }
-  }
 
-  loadTodaySchedule();
+    if(data.status === "next"){
+      box.classList.add("next");
+    }
+
+  }catch(err){
+    place.textContent = "本日の出店情報を取得できません";
+    time.textContent = "時間を置いて再読み込みしてください";
+    box.classList.add("closed");
+    console.log(err);
+  }
 })();
 </script>
 
