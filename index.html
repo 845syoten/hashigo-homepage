@@ -517,6 +517,56 @@ height:520px;
   border:1px solid rgba(217,48,37,.55);
   background:rgba(217,48,37,.12);
 }
+
+.point-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:22px;
+}
+
+.point-card{
+  background:linear-gradient(180deg,#1a1a1a,#101010);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:26px;
+  padding:28px;
+  box-shadow:0 18px 45px rgba(0,0,0,.25);
+}
+
+.point-card.main-point{
+  grid-column:span 2;
+  background:linear-gradient(135deg,rgba(255,211,107,.18),rgba(255,152,0,.08)),#151515;
+  border:1px solid rgba(255,211,107,.28);
+}
+
+.point-label{
+  display:inline-block;
+  color:#111;
+  background:#ffd36b;
+  border-radius:999px;
+  padding:6px 14px;
+  font-weight:1000;
+  font-size:13px;
+  margin-bottom:16px;
+}
+
+.point-card h3{
+  font-size:clamp(22px,4vw,32px);
+  margin-bottom:14px;
+  color:#fff;
+}
+
+.point-card p{
+  color:#d6d6d6;
+  line-height:1.95;
+  font-size:15px;
+}
+
+@media(max-width:768px){
+  .point-card.main-point{
+    grid-column:span 1;
+  }
+}
+
 </style>
 </head>
 
@@ -647,6 +697,49 @@ height:520px;
 
 
 
+
+
+
+<section class="section" id="point">
+
+  <div class="section-title">
+    <div class="mini">POINT</div>
+    <h2>おいしい食べ方</h2>
+  </div>
+
+  <div class="point-grid">
+
+    <div class="point-card main-point">
+      <div class="point-label">おすすめ</div>
+      <h3>揚げたてが一番おすすめ！</h3>
+      <p>
+        揚げパンサンドは、外はカリッと中はふわっとした食感が魅力です。
+        時間が経つとパンの水分や蒸気で少ししっとりしやすいため、
+        できるだけお早めにお召し上がりください。
+      </p>
+    </div>
+
+    <div class="point-card">
+      <div class="point-label">食べ方</div>
+      <h3>受け取ってすぐが最高</h3>
+      <p>
+        商品はできるだけ揚げたてでご提供しています。
+        カリッと感を楽しみたい方は、受け取ってすぐ食べるのがおすすめです。
+      </p>
+    </div>
+
+    <div class="point-card">
+      <div class="point-label">こだわり</div>
+      <h3>油っぽさを抑える工夫</h3>
+      <p>
+        パンは揚げる前に少し空気に当て、余分な水分を飛ばしてから調理しています。
+        油っぽくなりすぎないよう、温度管理と油切りにも気をつけています。
+      </p>
+    </div>
+
+  </div>
+
+</section>
 
 
 <section class="section">
